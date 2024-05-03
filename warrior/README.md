@@ -30,17 +30,17 @@ g++ main.cpp draw.cpp keyboard.cpp -o main -Iinclude -lGL -lglut -lGLU && ./main
 
 [ `W` ] = Gira o corpo para direita
 
-[ `A` ] = Levanta o braço esquerdo
+[ `S` ] = Levanta o braço esquerdo
 
-[ `Z` ] = Abaixa o braço esquerdo
+[ `X` ] = Abaixa o braço esquerdo
 
-[ `S` ] = Levanta o braço direito
+[ `D` ] = Levanta o braço direito
 
-[ `X` ] = Abaixa o braço direito
+[ `C` ] = Abaixa o braço direito
 
-[ `D` ] = Levanta a espada
+[ `A` ] = Levanta a espada
 
-[ `C` ] = Abaixa a espada
+[ `Z` ] = Abaixa a espada
 
 ### Screenshot
 
