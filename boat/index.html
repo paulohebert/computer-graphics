@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paisagem do Mar</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100%;
+        max-height: 100vh;
+        overflow: hidden;
+        background: linear-gradient(to top, midnightblue 50%, skyblue 50%);
+      }
+
+      @media screen and (min-width: 1200px) {
+        body {
+          background: linear-gradient(to top, midnightblue 9.25%, skyblue 9.25%);
+        }
+      }
+
+      @keyframes wave {
+        from {
+          transform: translate(10px, 100px) rotate(-5deg);
+        }
+
+        to {
+          transform: translate(10px, -70px) rotate(5deg);
+        }
+      }
+
+      .boat {
+        animation: wave 2.5s ease-in-out infinite alternate;
+      }
+    </style>
+    <!-- Paulo Hebert R. do Amaral -->
+  </head>
+
+  <body>
+    <svg width="100%" height="100vh" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+      <!-- COR DE MADEIRA DO BARCO -->
+      <defs>
+        <linearGradient id="madeira" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="darkgoldenrod" />
+          <stop offset="100%" stop-color="brown" />
+        </linearGradient>
+      </defs>
+
+      <!-- CÉU -->
+      <g>
+        <rect width="1920" height="980" x="0" y="0" fill="skyblue" />
+
+        <!-- SOL -->
+        <g>
+          <circle cx="170" cy="120" r="50" stroke="black" stroke-width="4" fill="yellow" />
+          <line x1="50" y1="120" x2="100" y2="120" stroke="black" stroke-width="4" />
+          <line x1="240" y1="120" x2="290" y2="120" stroke="black" stroke-width="4" />
+          <line x1="170" y1="10" x2="170" y2="50" stroke="black" stroke-width="4" />
+          <line x1="170" y1="190" x2="170" y2="245" stroke="black" stroke-width="4" />
+          <line x1="70" y1="30" x2="125" y2="75" stroke="black" stroke-width="4" />
+          <line x1="70" y1="30" x2="125" y2="75" stroke="black" stroke-width="4" transform="translate(145 140)" />
+          <line x1="70" y1="220" x2="125" y2="170" stroke="black" stroke-width="4" />
+          <line x1="70" y1="220" x2="125" y2="170" stroke="black" stroke-width="4" transform="translate(150 -145)" />
+        </g>
+
+        <!-- PÁSSAROS -->
+        <g>
+          <path d="M 1409 323 Q 1490 320 1496 357 Q 1510 318 1569 318" stroke="black" stroke-width="4" fill="none" />
+          <path
+            d="M 1409 323 Q 1490 320 1496 357 Q 1510 318 1569 318"
+            stroke="black"
+            stroke-width="4"
+            fill="none"
+            transform="translate(145 140)"
+          />
+          <path
+            d="M 1409 323 Q 1490 320 1496 357 Q 1510 318 1569 318"
+            stroke="black"
+            stroke-width="4"
+            fill="none"
+            transform="translate(-145 100)"
+          />
+        </g>
+      </g>
+      <!-- MAR -->
+      <g>
+        <rect width="1920" height="100" x="0" y="980" fill="midnightblue" />
+
+        <!-- BARCO -->
+        <g class="boat">
+          <polygon points="700,920 770,1000 1050,1000 1120,920" fill="url(#madeira)" />
+          <line x1="910" y1="700" x2="910" y2="920" stroke="black" stroke-width="4" />
+          <polygon points="910,900 1080,900 910,700" fill="whitesmoke" stroke="black" stroke-width="3" />
+          <polygon points="910,900 780,900 910,740" fill="whitesmoke" stroke="black" stroke-width="3" />
+        </g>
+      </g>
+    </svg>
+  </body>
+</html>

@@ -2,4 +2,6 @@
 
 ## Atividades
 
-- [x] [Hierarquia e transformações geométricas](/warrior)
+- [x] [Gráficos SVG](/boat)
+
+- [x] [Hierarquia e transformações geométricas - OpenGL](/warrior)
