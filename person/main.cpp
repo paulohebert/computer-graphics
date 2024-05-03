@@ -14,25 +14,20 @@ void reshape(GLsizei width, GLsizei height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
+    /* Ajusta a posição do personagem para não desaparecer da tela */
     if (translateX < -view_width)
         translateX = -view_width;
-    if (translateX > view_width)
+    else if (translateX > view_width)
         translateX = view_width;
 
     gluOrtho2D(-view_width, view_width, -100, 100);
-
-    /*
-        if (width > height)
-            gluOrtho2D(-100, 100.0 * width / height, -100, 100 * width / height);
-        else
-            gluOrtho2D(-100.0 * width / height, 100.0 * width / height, 0.0, 100.0); */
 }
 
 void init()
 {
     glClearColor(0.2, 0.7, 0.8, 1.0);
 
-    translateX = rot_body = rot_left_arm = rot_right_arm = 0;
+    translateX = rot_body = rot_sword = rot_left_arm = rot_right_arm = 0;
 }
 
 int main(int argc, char **argv)
@@ -44,7 +39,7 @@ int main(int argc, char **argv)
     int screenHeight = glutGet(GLUT_SCREEN_HEIGHT);
     glutInitWindowSize(screenWidth, screenHeight);
 
-    glutCreateWindow("Atividade");
+    glutCreateWindow("Guerreiro");
 
     glutDisplayFunc(drawScene);
 

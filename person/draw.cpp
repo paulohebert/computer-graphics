@@ -2,7 +2,7 @@
 #include <string>
 #include "draw.h"
 
-GLfloat translateX, rot_body, rot_left_arm, rot_right_arm, view_width;
+GLfloat translateX, rot_body, rot_left_arm, rot_right_arm, rot_sword, view_width;
 
 /* Cabeça */
 void drawHead()
@@ -18,18 +18,18 @@ void drawHead()
     glColor3f(1.0, 1.0, 1.0);
 
     /* Olhos */
-    glPointSize(7.0);
+    glPointSize(7.0 - (view_width / 100));
     glBegin(GL_POINTS);
     glVertex2f(-2.0, 28.0);
     glVertex2f(2.0, 28.0);
     glEnd();
 
-    glLineWidth(5.0);
+    glLineWidth(5.0 - (view_width / 125));
 
     /* Boca */
     glBegin(GL_LINES);
-    glVertex2i(-2, 23);
-    glVertex2i(2, 23);
+    glVertex2f(-2, 23);
+    glVertex2f(2, 23);
     glEnd();
 }
 
@@ -46,17 +46,77 @@ void drawLegs()
     glEnd();
 }
 
-/* Pessoa */
-void drawPerson()
+/* Braço Esquerdo */
+void drawLeftArm()
 {
-    glColor3f(0.7, 0.5, 0.2);
-    glEnable(GL_LINE_SMOOTH);
-    glLineWidth(10.0);
-
-    /* Mover Horizontal */
+    /* Rotacionar Braço Esquerdo */
     glPushMatrix();
-    glTranslatef(translateX, 0.0, 0.0);
+    glTranslatef(0, 20.0, 0.0);
+    glRotatef(rot_left_arm, 0.0, 0.0, 1.0);
+    glTranslatef(0, -20.0, 0.0);
 
+    /* Braço Esquerdo */
+    glBegin(GL_LINES);
+    glVertex2i(0, 20);
+    glVertex2i(-10, 0);
+    glEnd();
+
+    /* Rotacionar Espada */
+    glPushMatrix();
+    glTranslatef(-10, 0.0, 0.0);
+    glRotatef(rot_sword, 0.0f, 0.0f, 1.0f);
+    glTranslatef(10, 0.0, 0.0);
+
+    glColor3f(0.0, 0.0, 0.0);
+
+    /* Espada */
+    glBegin(GL_LINES);
+    glVertex2i(-10, 0);
+    glVertex2i(-40, 30);
+    glVertex2i(-17, 0);
+    glVertex2i(-10, 7);
+    glEnd();
+
+    /* Remover Rotação da Espada */
+    glPopMatrix();
+
+    /* Remover Rotação do Braço Esquerdo */
+    glPopMatrix();
+}
+
+/* Braço Direito */
+void drawRightArm()
+{
+    /* Rotacionar Braço Direito */
+    glPushMatrix();
+    glTranslatef(0, 20.0, 0.0);
+    glRotatef(rot_right_arm, 0.0f, 0.0f, 1.0f);
+    glTranslatef(0, -20.0, 0.0);
+
+    /* Escudo */
+    glBegin(GL_POLYGON);
+    glVertex2f(15, 10);
+    glVertex2f(20, 0);
+    glVertex2f(10, -5);
+    glVertex2f(2.5, -3);
+    glVertex2f(5, 5);
+    glEnd();
+
+    glColor3f(0.7, 0.5, 0.2);
+
+    /* Braço Direito */
+    glBegin(GL_LINES);
+    glVertex2i(0, 20);
+    glVertex2i(10, 0);
+    glEnd();
+
+    /* Remover Rotação do Braço Direito */
+    glPopMatrix();
+}
+
+/* Corpo */
+void drawBody()
+{
     /* Pernas */
     drawLegs();
 
@@ -72,90 +132,92 @@ void drawPerson()
     glVertex2i(0, 20);
     glEnd();
 
-    /* Rotacionar Braço Esquerdo */
-    glPushMatrix();
-    glTranslatef(0, 20.0, 0.0);
-    glRotatef(rot_left_arm, 0.0, 0.0, 1.0);
-    glTranslatef(0, -20.0, 0.0);
+    /* Braço Esquerdo e a Espada */
+    drawLeftArm();
 
-    /* Braço Esquerdo */
-    glBegin(GL_LINES);
-    glVertex2i(0, 20);
-    glVertex2i(-10, 0);
-    glEnd();
-
-    /* Remover Rotação do Braço Esquerdo */
-    glPopMatrix();
-
-    /* Rotacionar Braço Direito */
-    glPushMatrix();
-    glTranslatef(0, 20.0, 0.0);
-    glRotatef(rot_right_arm, 0.0f, 0.0f, 1.0f);
-    glTranslatef(0, -20.0, 0.0);
-
-    /* Braço Direito */
-    glBegin(GL_LINES);
-    glVertex2i(0, 20);
-    glVertex2i(10, 0);
-    glEnd();
-
-    /* Remover Rotação do Braço Direito */
-    glPopMatrix();
+    /* Braço Direito e o Escudo */
+    drawRightArm();
 
     /* Cabeça */
     drawHead();
 
     /* Remover Rotação do Corpo */
     glPopMatrix();
+}
+
+/* Guerreiro */
+void drawWarrior()
+{
+    glColor3f(0.7, 0.5, 0.2);
+    glEnable(GL_LINE_SMOOTH);
+    glLineWidth(10.0);
+
+    /* Mover Horizontal */
+    glPushMatrix();
+    glTranslatef(translateX, 0.0, 0.0);
+
+    /* Corpo */
+    drawBody();
+
     /* Remover Translação Horizontal */
     glPopMatrix();
 }
 
+/* Mostra Informações das rotações e da translação */
 void drawInfo()
 {
     glColor3f(1.0, 1.0, 1.0);
 
-    std::string text = "X = " + std::to_string(translateX);
+    float gap = view_width < 200 ? view_width / 200.0 : view_width < 250 ? view_width / 100.0
+                                                                         : view_width / 50.0;
 
-    glRasterPos2i(-view_width, 95 - (view_width / 200.0));
-    for (int i = 0; i < text.length(); ++i)
+    std::string translateX_info = "X = " + std::to_string(translateX);
+
+    glRasterPos2f(-view_width, 95 - gap);
+    for (int i = 0, size = translateX_info.size(); i < size; ++i)
     {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text[i]);
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, translateX_info[i]);
     }
 
-    std::string text1 = "Corpo = " + std::to_string((int)rot_body) + " graus";
+    std::string rot_body_info = "Corpo = " + std::to_string((int)rot_body) + " graus";
 
-    glRasterPos2i(-view_width, 89 - (view_width / 200.0));
-    for (int i = 0; i < text1.length(); ++i)
+    glRasterPos2f(-view_width, 89 - 2 * gap);
+    for (int i = 0, size = rot_body_info.size(); i < size; ++i)
     {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text1[i]);
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, rot_body_info[i]);
     }
 
-    std::string text2 = "B. Esquerdo. = " + std::to_string((int)rot_left_arm) + " graus";
+    std::string rot_left_arm_info = "B. Esquerdo. = " + std::to_string((int)rot_left_arm) + " graus";
 
-    glRasterPos2i(-view_width, 83 - (view_width / 200.0));
-    for (int i = 0; i < text2.length(); ++i)
+    glRasterPos2f(-view_width, 83 - 3 * gap);
+    for (int i = 0, size = rot_left_arm_info.size(); i < size; ++i)
     {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text2[i]);
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, rot_left_arm_info[i]);
     }
 
-    std::string text3 = "B. Direito. = " + std::to_string((int)rot_right_arm) + " graus";
+    std::string rot_right_arm_info = "B. Direito. = " + std::to_string((int)rot_right_arm) + " graus";
 
-    glRasterPos2i(-view_width, 77 - (view_width / 200.0));
-    for (int i = 0; i < text3.length(); ++i)
+    glRasterPos2f(-view_width, 77 - 4 * gap);
+    for (int i = 0, size = rot_right_arm_info.size(); i < size; ++i)
     {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text3[i]);
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, rot_right_arm_info[i]);
+    }
+
+    std::string rot_sword_info = "Espada = " + std::to_string((int)rot_sword) + " graus";
+
+    glRasterPos2f(-view_width, 71 - 5 * gap);
+    for (int i = 0, size = rot_sword_info.size(); i < size; ++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, rot_sword_info[i]);
     }
 }
 
-void drawScene()
+/* Plano de Fundo */
+void drawBackground()
 {
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glClear(GL_COLOR_BUFFER_BIT);
-
     glColor3f(0.2, 0.2, 0.2);
 
+    /* Piso */
     glBegin(GL_QUADS);
     glVertex2f(-view_width, -70);
     glVertex2f(view_width, -70);
@@ -165,15 +227,28 @@ void drawScene()
 
     glColor3f(0.0, 0.65, 0.0);
 
+    /* Jardim */
     glBegin(GL_QUADS);
     glVertex2f(-view_width, -100);
     glVertex2f(view_width, -100);
     glVertex2f(view_width, -70);
     glVertex2f(-view_width, -70);
     glEnd();
+}
 
-    drawPerson();
+void drawScene()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT);
 
+    /* Plano de Fundo */
+    drawBackground();
+
+    /* Guerreiro */
+    drawWarrior();
+
+    /* Mostra os dados sobre rotação e translação */
     drawInfo();
 
     glFlush();
