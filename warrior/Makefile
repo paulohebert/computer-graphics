@@ -1,9 +1,10 @@
 TARGET = warrior
 
 # Diretórios
-SRC_DIR = src
-INCLUDE_DIR = include
-BUILD_DIR = build
+MAKEFILE_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+SRC_DIR = $(MAKEFILE_DIR)src
+INCLUDE_DIR = $(MAKEFILE_DIR)include
+BUILD_DIR = $(MAKEFILE_DIR)build
 
 # Compiladores
 CC = g++
@@ -12,7 +13,7 @@ EMCC = em++
 # Flags de compilação
 LDFLAGS = -lGL -lglut -lGLU
 CFLAGS = -Wall -O2 -I$(INCLUDE_DIR)
-EMFLAGS = -O2 -I$(INCLUDE_DIR) -sLEGACY_GL_EMULATION --shell-file shell.html
+EMFLAGS = -O2 -I$(INCLUDE_DIR) -sLEGACY_GL_EMULATION --shell-file $(MAKEFILE_DIR)shell.html
 
 # Busca todos os arquivos .cpp no diretório src
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
