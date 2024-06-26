@@ -1,6 +1,9 @@
 #include <GL/glut.h>
 #include "draw.h"
 #include "keyboard.h"
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#endif
 
 void reshape(GLsizei width, GLsizei height)
 {
@@ -50,6 +53,11 @@ int main(int argc, char **argv)
 
     init();
 
-    glutMainLoop();
+    #ifdef __EMSCRIPTEN__
+        emscripten_set_main_loop(glutPostRedisplay, 0, 1);
+    #else
+        glutMainLoop();
+    #endif
+
     return 0;
 }

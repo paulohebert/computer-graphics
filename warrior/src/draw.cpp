@@ -1,6 +1,9 @@
 #include <GL/glut.h>
 #include <string>
 #include "draw.h"
+#ifdef __EMSCRIPTEN__
+#include "emscripten/html5.h"
+#endif
 
 GLfloat translateX, rot_body, rot_left_arm, rot_right_arm, rot_sword, view_width;
 
@@ -94,12 +97,18 @@ void drawRightArm()
     glTranslatef(0, -20.0, 0.0);
 
     /* Escudo */
-    glBegin(GL_POLYGON);
+    glBegin(GL_TRIANGLES);
     glVertex2f(15, 10);
     glVertex2f(20, 0);
     glVertex2f(10, -5);
+
+    glVertex2f(10, -5);
     glVertex2f(2.5, -3);
     glVertex2f(5, 5);
+
+    glVertex2f(10, -5);
+    glVertex2f(5, 5);
+    glVertex2f(15, 10);
     glEnd();
 
     glColor3f(0.7, 0.5, 0.2);
@@ -163,6 +172,7 @@ void drawWarrior()
     glPopMatrix();
 }
 
+#ifndef __EMSCRIPTEN__
 /* Mostra Informações das rotações e da translação */
 void drawInfo()
 {
@@ -211,6 +221,7 @@ void drawInfo()
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, rot_sword_info[i]);
     }
 }
+#endif
 
 /* Plano de Fundo */
 void drawBackground()
@@ -236,8 +247,27 @@ void drawBackground()
     glEnd();
 }
 
+#ifdef __EMSCRIPTEN__
+/* Ajusta a Tela pelo Tamanho do Canvas */
+void check_for_reshape()
+{
+    double canvasWidth, canvasHeight;
+    emscripten_get_element_css_size("canvas", &canvasWidth, &canvasHeight);
+    if (view_width != 100.0 * canvasWidth / canvasHeight)
+    {
+        view_width = 100.0 * canvasWidth / canvasHeight;
+        glutReshapeWindow(canvasWidth, canvasHeight);
+    }
+}
+#endif
+
 void drawScene()
 {
+    #ifdef __EMSCRIPTEN__
+    /* Ajusta a Tela pelo Tamanho do Canvas */
+    check_for_reshape();
+    #endif
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT);
@@ -248,8 +278,10 @@ void drawScene()
     /* Guerreiro */
     drawWarrior();
 
+    #ifndef __EMSCRIPTEN__
     /* Mostra os dados sobre rotação e translação */
     drawInfo();
+    #endif
 
     glFlush();
 }
